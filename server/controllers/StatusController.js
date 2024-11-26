@@ -1,7 +1,7 @@
 const { Status } = require("../models");
 
 module.exports = class StatusController {
-  static async getStatus(req, res) {
+  static async getStatus(req, res, next) {
     try {
         const status = await Status.findAll();
         res.status(200).json(status);

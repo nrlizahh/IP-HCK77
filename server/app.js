@@ -21,7 +21,7 @@ app.get('/notes/:id', NoteController.deleteNote)
 //Status
 app.get('/statuses', StatusController.getStatus)
 
-app.use()
+app.use(errorHandler)
 app.listen(port, () => {
   console.log(`i like ur ${port} dollars`);
 });

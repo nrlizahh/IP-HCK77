@@ -1,7 +1,7 @@
 const { Note } = require("../models");
 
 module.exports = class NoteController {
-  static async getNote(req, res) {
+  static async getNote(req, res, next) {
     try {
       const note = await Note.findAll();
       res.status(200).json(note);
@@ -11,7 +11,7 @@ module.exports = class NoteController {
     }
   }
 
-  static async findNoteById(req, res) {
+  static async findNoteById(req, res, next) {
     try {
       const { id } = req.params;
       const note = await Note.findByPk(id);
@@ -30,7 +30,7 @@ module.exports = class NoteController {
     }
   }
 
-  static async createNote(req, res) {
+  static async createNote(req, res, next) {
     try {
       req.body.userId = req.user.id;
       const note = await Note.create(req.body);
@@ -44,7 +44,7 @@ module.exports = class NoteController {
     }
   }
 
-  static async updateNote(req, res) {
+  static async updateNote(req, res, next) {
     try {
       req.body.userId = req.user.id;
       const { id } = req.params;
@@ -67,7 +67,7 @@ module.exports = class NoteController {
     }
   }
 
-  static async deleteNote(req, res) {
+  static async deleteNote(req, res, next) {
     try {
       const { id } = req.params;
       const note = await Note.findByPk(id);
