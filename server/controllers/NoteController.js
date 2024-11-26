@@ -17,10 +17,10 @@ module.exports = class NoteController {
       const note = await Note.findByPk(id);
 
       if (!note) {
-        throw {
+        return next({
           name: "NotFound",
           message: "Note not found",
-        };
+        });
       }
 
       res.status(200).json(note);
@@ -37,7 +37,7 @@ module.exports = class NoteController {
 
       res
         .status(201)
-        .json({ data: note, message: `Note ${req.body.title} created` });
+        .json({ data: note, message: `Note ${req.body.task} created` });
     } catch (err) {
       console.log("🚀 ~ NoteController ~ createNote ~ err:", err);
       next(err);
@@ -50,17 +50,17 @@ module.exports = class NoteController {
       const { id } = req.params;
       const note = await Note.findByPk(id);
       if (!note) {
-        throw {
+        return next({
           name: "NotFound",
           message: "Note not found",
-        };
+        });
       }
 
       await note.update(req.body, {
         individualHooks: true,
       });
 
-      res.status(200).json({ data: note, message: `Note ${note.name} update` });
+      res.status(200).json({ data: note, message: `Note ${note.task} update` });
     } catch (err) {
       console.log("🚀 ~ NoteController ~ updateNote ~ err:", err);
       next(err);
@@ -73,16 +73,14 @@ module.exports = class NoteController {
       const note = await Note.findByPk(id);
 
       if (!note) {
-        throw {
+        return next({
           name: "NotFound",
           message: `Note id:${id} not found`,
-        };
+        });
       }
 
       await note.destroy();
-      res
-        .status(200)
-        .json({ message: `Note ${note.name} success to delete` });
+      res.status(200).json({ message: `Note ${note.task} success to delete` });
     } catch (err) {
       console.log("🚀 ~ NoteController ~ deleteNote ~ err:", err);
       next(err);

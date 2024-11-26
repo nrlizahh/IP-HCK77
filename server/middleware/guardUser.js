@@ -1,10 +1,6 @@
 const { Note } = require("../models");
 async function guardUser(req, res, next) {
   try {
-    // if (req.user.role.toLowerCase() === "admin") {
-    //   next();
-    //   return;
-    // }
     const noteId = Number(req.params.id);
 
     const userId = req.user.id;

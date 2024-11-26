@@ -41,7 +41,10 @@ module.exports = (sequelize, DataTypes) => {
       }
     },   
     userId: DataTypes.INTEGER,
-    statusId: DataTypes.INTEGER
+    statusId: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1,
+    }
   }, {
     sequelize,
     modelName: 'Note',
