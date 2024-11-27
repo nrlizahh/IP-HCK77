@@ -7,6 +7,8 @@ const authentication = async (req, res, next) => {
 
   const bearerToken = req.headers["authorization"];
   //   console.log(bearerToken)
+  
+
   if (!bearerToken) {
     next({ name: "Unauthorized", message: "Invalid Token" });
     return;

@@ -1,6 +1,9 @@
+const cors = require('cors')
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
+const port = process.env.PORT || 3000;
+
 
 const express = require("express");
 const NoteController = require("./controllers/NoteController");
@@ -9,11 +12,15 @@ const { errorHandler } = require("./middleware/errorHandler");
 const UserController = require("./controllers/UserController");
 const authentication = require("./middleware/authentication");
 const guardUser = require("./middleware/guardUser");
+const crossOrigin = require('./middleware/cors');
 const app = express();
 
 
+app.use(cors())
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+app.use(crossOrigin)
 
 //User
 app.post("/login", UserController.login);
@@ -31,5 +38,7 @@ app.get("/statuses", StatusController.getStatus);
 
 app.use(errorHandler);
 
-
+app.listen(port, () => {
+    console.log(`i like ur ${port} dollars`);
+  });
 module.exports = app

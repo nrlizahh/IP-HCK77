@@ -37,10 +37,17 @@ let user = [
   },
 ];
 
+let validToken;
 beforeAll(async () => {
+  try {
     await sequelize.queryInterface.bulkInsert("Users", user);
-  await sequelize.queryInterface.bulkInsert("Statuses", status);
+    await sequelize.queryInterface.bulkInsert("Statuses", status);
+    const admin = await User.findOne({ where: { email: "tangsaky@mail.com" } });
 
+    validToken = signToken(admin.id);
+  } catch (err) {
+    console.log("🚀 ~ beforeAll ~ err:", err);
+  }
 });
 
 afterAll(async () => {
@@ -53,5 +60,28 @@ afterAll(async () => {
     truncate: true,
     restartIdentity: true,
     cascade: true,
+  });
+});
+
+describe("Login(Admin)", () => {
+  test("200 - Fetch all statuses successfully with valid token", async () => {
+    const res = await request(app)
+      .get("/statuses")
+      .set("Authorization", `Bearer ${validToken}`);
+
+    expect(res.status).toBe(200);
+    res.body.forEach((status, index) => {
+      expect(status).toHaveProperty(
+        "name",
+        ["To Do", "In Progress", "Completed"][index]
+      );
+    });
+  });
+
+  test("401 - Unauthorized when no token is provided", async () => {
+    const response = await request(app).get("/statuses");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message", "Invalid Token");
   });
 });
