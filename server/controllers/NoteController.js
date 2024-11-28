@@ -3,7 +3,8 @@ const { Note } = require("../models");
 module.exports = class NoteController {
   static async getNote(req, res, next) {
     try {
-      const note = await Note.findAll();
+      const userId = req.user.id;
+      const note = await Note.findAll({ where: { userId } });
       res.status(200).json(note);
     } catch (err) {
       console.log("🚀 ~ NoteController ~ getNote ~ err:", err);
@@ -34,7 +35,7 @@ module.exports = class NoteController {
     try {
       req.body.userId = req.user.id;
       const note = await Note.create(req.body);
-
+      
       res
         .status(201)
         .json({ data: note, message: `Note ${req.body.task} created` });

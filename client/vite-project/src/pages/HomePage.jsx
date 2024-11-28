@@ -7,7 +7,6 @@ export default function HomePage() {
   const [notes, setNotes] = useState([]);
   const [statuses, setStatuses] = useState([]);
 
-  // Fetch notes and statuses
   useEffect(() => {
     axios({
       method: "GET",
@@ -30,7 +29,6 @@ export default function HomePage() {
       .catch(console.log);
   }, []);
 
-  // Filter notes by statusId
   const renderNotesByStatus = (statusId) => {
     return notes.filter((note) => note.statusId === statusId);
   };
@@ -43,7 +41,8 @@ export default function HomePage() {
           <KanbanBoard
             key={status.id}
             status={status}
-            notes={renderNotesByStatus(status.id)} // Filter notes based on statusId
+            notes={renderNotesByStatus(status.id)}
+            setNotes={setNotes} // Pass setNotes ke KanbanBoard
           />
         ))}
       </div>

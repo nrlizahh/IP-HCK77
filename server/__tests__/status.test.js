@@ -22,7 +22,7 @@ const status = [
   },
 ];
 
-let user = [
+const user = [
   {
     username: "tangsa",
     email: "tangsaky@mail.com",
@@ -44,26 +44,26 @@ beforeAll(async () => {
     await sequelize.queryInterface.bulkInsert("Statuses", status);
     const admin = await User.findOne({ where: { email: "tangsaky@mail.com" } });
 
-    validToken = signToken(admin.id);
+    validToken = signToken({ id: admin.id });
   } catch (err) {
     console.log("🚀 ~ beforeAll ~ err:", err);
   }
 });
 
 afterAll(async () => {
-  Status.destroy({
+  await Status.destroy({
     truncate: true,
     restartIdentity: true,
     cascade: true,
   });
-  User.destroy({
+  await User.destroy({
     truncate: true,
     restartIdentity: true,
     cascade: true,
   });
 });
 
-describe("Login(Admin)", () => {
+describe("Statuses", () => {
   test("200 - Fetch all statuses successfully with valid token", async () => {
     const res = await request(app)
       .get("/statuses")
